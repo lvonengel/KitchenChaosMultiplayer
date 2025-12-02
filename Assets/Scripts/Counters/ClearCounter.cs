@@ -1,10 +1,16 @@
 using UnityEngine;
 
+/// <summary>
+/// Class for all empty counters.
+/// Kitchen objects can be placed on it.
+/// </summary>
 public class ClearCounter : BaseCounter {
 
-    [SerializeField] private KitchenObjectSO kitchenObjectSO;
-
-
+    /// <summary>
+    /// Interaction for placing and picking kitchen objects onto it.
+    /// Can also combine existing kitchen object with plate.
+    /// </summary>
+    /// <param name="player">The player interacting with the counter</param>
     public override void Interact(Player player) {
         if (!HasKitchenObject()) {
             // Does not have kitchen object on it
@@ -20,14 +26,14 @@ public class ClearCounter : BaseCounter {
                 if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
                     //player is holding a plate
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())) {
-                        GetKitchenObject().DestroySelf();
+                        KitchenObject.DestroyKitchenObject(GetKitchenObject());
                     }
                 } else {
                     //player is not holding a plate but something else
                     if (GetKitchenObject().TryGetPlate(out plateKitchenObject)) {
                         // counter is holding a plate
                         if (plateKitchenObject.TryAddIngredient(player.GetKitchenObject().GetKitchenObjectSO())) {
-                            player.GetKitchenObject().DestroySelf();
+                            KitchenObject.DestroyKitchenObject(player.GetKitchenObject());
                         }
                     }
                 }

@@ -2,18 +2,46 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Manages the user input for moving, interacting, alternate interacting, and pausing.
+/// Also manages key rebindings using Playerprefs
+/// </summary>
 public class GameInput : MonoBehaviour {
 
+    //player pref to store bindings
     private const string PLAYER_PREFS_BINDINGS = "InputBindings";
 
     public static GameInput Instance {get; private set;}
 
+    /// <summary>
+    /// Fired when the player interacts with something (default E)
+    /// </summary>
     public event EventHandler OnInteractAction;
+
+    /// <summary>
+    /// Fired when the player alternate interacts with something (default F)
+    /// </summary>
     public event EventHandler OnInteractAlternateAction;
+
+    /// <summary>
+    /// Fired when the player pauses the game (default escape)
+    /// </summary>
     public event EventHandler OnPauseAction;
+
+    /// <summary>
+    /// Fired when the player rebinds a key
+    /// Used mostly for UI
+    /// </summary>
     public event EventHandler OnBindingRebind;
+
+    /// <summary>
+    /// For auto-generated InputActions class
+    /// </summary>
     private PlayerInputActions playerInputActions;
 
+    /// <summary>
+    /// Keys that the player can rebind
+    /// </summary>
     public enum Binding {
         Move_Up,
         Move_Down,
@@ -30,6 +58,7 @@ public class GameInput : MonoBehaviour {
     private void Awake() {
         Instance = this;
         
+        //if player has saved bindings, then load them
         playerInputActions = new PlayerInputActions();
         if (PlayerPrefs.HasKey(PLAYER_PREFS_BINDINGS)) {
             playerInputActions.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREFS_BINDINGS));
@@ -41,6 +70,7 @@ public class GameInput : MonoBehaviour {
         playerInputActions.Player.Pause.performed += Pause_performed;
     }
 
+    // unsubscribes from input to prevene memory leaks
     private void OnDestroy() {
         playerInputActions.Player.Interact.performed -= Interact_performed;
         playerInputActions.Player.InteractAlternate.performed -= InteractAlternate_performed;
@@ -49,23 +79,25 @@ public class GameInput : MonoBehaviour {
         playerInputActions.Dispose();
     }
 
+    // When the player pauses, sends signal
     public void Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         // Checks if null, if not calls function
         OnPauseAction?.Invoke(this, EventArgs.Empty);
     }
 
-    // When the player presses e to place/grab objects, sends signal
+    // When the player places/grabs objects, sends signal
     public void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         // Checks if null, if not calls function
         OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
 
-    // When the player presses f to cut objects, sends signal
+    // When the player cuts objects, sends signal
     public void InteractAlternate_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         // Checks if null, if not calls function
         OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
     }
 
+    //gets current movement input vector and normalizes it
     public Vector2 GetMovementVectorNormalized() {
         Vector2 inputVector = playerInputActions.Player.Move.ReadValue<Vector2>();
         
@@ -73,6 +105,11 @@ public class GameInput : MonoBehaviour {
         return inputVector;
     }
 
+    /// <summary>
+    /// Returns a readable string from the current binding
+    /// </summary>
+    /// <param name="binding">The binding to check</param>
+    /// <returns>The readable name for the binding</returns>
     public string GetBindingText(Binding binding) {
         switch (binding) {
             default:
@@ -99,6 +136,11 @@ public class GameInput : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Rebinds a key for the user by saving to PlayerPrefs
+    /// </summary>
+    /// <param name="binding">The binding to reset</param>
+    /// <param name="onActionRebound">Callback when rebinding finishes</param>
     public void RebindBinding(Binding binding, Action onActionRebound) {
         playerInputActions.Player.Disable();
         InputAction inputAction;
@@ -146,12 +188,15 @@ public class GameInput : MonoBehaviour {
                 bindingIndex = 1;
                 break;
         }
+
+        //starts rebinding for the binding index
         inputAction.PerformInteractiveRebinding(bindingIndex)
             .OnComplete(callback => {
                 callback.Dispose();
                 playerInputActions.Player.Enable();
                 onActionRebound();
                 
+                // saves to player prefs so can be loaded when screen changes/game exits
                 PlayerPrefs.SetString(PLAYER_PREFS_BINDINGS, playerInputActions.SaveBindingOverridesAsJson());
                 PlayerPrefs.Save();
 

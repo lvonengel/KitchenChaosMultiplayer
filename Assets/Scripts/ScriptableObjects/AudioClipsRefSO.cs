@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+// Holds all the audio clips used in game
 [CreateAssetMenu()]
 public class AudioClipsRefSO : ScriptableObject {
 

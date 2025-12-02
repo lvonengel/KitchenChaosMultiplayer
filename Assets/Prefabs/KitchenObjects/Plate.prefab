@@ -240,7 +240,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 770926111325034183}
+  - component: {fileID: -7840356843493911214}
   - component: {fileID: 4130952501037294526}
+  - component: {fileID: -3544211210461144515}
   m_Layer: 0
   m_Name: Plate
   m_TagString: Untagged
@@ -266,6 +268,31 @@ Transform:
   - {fileID: 591858331200609417}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7840356843493911214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3623223416243068536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2818168469
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &4130952501037294526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e299cc50204fc4a9ec6b4b82cf8644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlateKitchenObject
+  ShowTopMostFoldoutHeaderGroup: 1
   kitchenObjectSO: {fileID: 11400000, guid: 5dbaa5056134d144aabeb329b732f099, type: 2}
   validKitchenObjectSOList:
   - {fileID: 11400000, guid: 71195e6f5dd8b3e4abfd2e70550b51ec, type: 2}
@@ -286,6 +314,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1875331614538734085b5d12a7f4ce3e, type: 2}
   - {fileID: 11400000, guid: 8e6c23e3ee49c7443a9763d771f70457, type: 2}
   - {fileID: 11400000, guid: 9bef10d481922ee4e824587f35ce2b62, type: 2}
+--- !u!114 &-3544211210461144515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3623223416243068536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ca51ac7667928418d77a8fc6f50974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FollowTransform
 --- !u!1 &7166793433359354818
 GameObject:
   m_ObjectHideFlags: 0

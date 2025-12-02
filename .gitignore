@@ -41,3 +41,9 @@ Thumbs.db
 sysinfo.txt
 
 *.unitypackage
+
+Assets/QuantumConsole/Generated/
+Assets/Plugins/
+Assets/_Recovery/
+*.dll
+*.xml
